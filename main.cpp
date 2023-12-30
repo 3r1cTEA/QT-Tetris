@@ -2,18 +2,19 @@
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
+#include <QPixmap>
 
 
-
-#include "tetromino.h"
 
 const int M = 20;
 const int N = 10;
 
-int field[M][N] = {0};
+int field[M][N];
 
 struct Point
-{int x,y;} a[4], b[4];
+{int x,y;} quad[4], quab[4];
+
+
 
 int figures[7][4] =
 {
@@ -34,31 +35,29 @@ int main(int argc, char *argv[])
 
     //QGraphicsRectItem *rect = new QGraphicsRectItem();
 
-    tetromino *rect = new tetromino();
-    QBrush red(Qt::red);
-    QPen blackpen(Qt::black);
-    blackpen.setWidth(2);
+    QRect rect(36, 0, 18, 18);
+    QPixmap image(":/tiles.png");
+    QPixmap copy ;
+    copy = image.copy(rect);
 
-    rect->setRect(0,0,18,18);
-    rect->setBrush(red);
-    rect->setPen(blackpen);
-
-    tetromino *recto = new tetromino();
-
-    blackpen.setWidth(2);
-
-    recto->setRect(18,0,18,18);
-    recto->setBrush(red);
-    recto->setPen(blackpen);
+    int n = 0;
+    for (int i = 0; i <4; i++)
+    {
+        quad[i].x= figures[n][i] % 2;
+        quad[i].y= figures[n][i] / 2;
+    }
 
 
+    QPixmap* pCircle = new QPixmap(copy);
+   // QPixmap* pCircle = porig->copy(rect);
+    for (int i=0; i <4; i++)
+    {
+        QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem(*pCircle);
+        pItem->setPos(quad[i].x*18,quad[i].y*18);
+        scene->addItem(pItem);
+    }
 
-
-    scene->addItem(rect);
-    scene->addItem(recto);
-
-    rect->setFlag(QGraphicsItem::ItemIsFocusable);
-    rect->setFocus();
+    //scene->addPixmap(copy);
 
     QGraphicsView *view = new QGraphicsView(scene);
 
