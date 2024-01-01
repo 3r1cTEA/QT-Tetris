@@ -6,8 +6,16 @@
 
 
 
+
+#include <QDebug>
+#include "tertimino.h"
+#include "MyRect.h"
+
+
+
 const int M = 20;
 const int N = 10;
+const int pix_l = 18;
 
 int field[M][N];
 
@@ -29,42 +37,51 @@ int figures[7][4] =
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
 
-    QGraphicsScene *scene = new QGraphicsScene();
+QApplication a(argc, argv);
+QGraphicsScene * scene = new QGraphicsScene();
 
-    //QGraphicsRectItem *rect = new QGraphicsRectItem();
+       //clip tetris tile
+       QRect recto(pix_l*3, 0, pix_l, pix_l);
+       QPixmap image(":/tiles.png");
+       QPixmap copy ;
+       copy = image.copy(recto);
 
-    QRect rect(36, 0, 18, 18);
-    QPixmap image(":/tiles.png");
-    QPixmap copy ;
-    copy = image.copy(rect);
+       //set tetrimino shape
+       int n = 0;
+       for (int i = 0; i <4; i++)
+       {
+           quad[i].x= figures[n][i] % 2;
+           quad[i].y= figures[n][i] / 2;
+       }
 
-    int n = 0;
-    for (int i = 0; i <4; i++)
-    {
-        quad[i].x= figures[n][i] % 2;
-        quad[i].y= figures[n][i] / 2;
-    }
+       //int *dx = new int;
+       for (int i=0; i <4; i++)
+       {
+       // create an item to add to the scene
+       Tertimino * tet = new Tertimino();
+       tet->setPixmap(copy);
 
 
-    QPixmap* pCircle = new QPixmap(copy);
-   // QPixmap* pCircle = porig->copy(rect);
-    for (int i=0; i <4; i++)
-    {
-        QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem(*pCircle);
-        pItem->setPos(quad[i].x*18,quad[i].y*18);
-        scene->addItem(pItem);
-    }
+       tet->setPos(quad[i].x*pix_l,quad[i].y*pix_l);
+       if (i==0){
+       tet->setFlag(QGraphicsItem::ItemIsFocusable);
+       tet->setFocus();
+        }
 
-    //scene->addPixmap(copy);
 
-    QGraphicsView *view = new QGraphicsView(scene);
 
-    view->setFixedWidth(320);
-    view->setFixedHeight(480);
+       scene->addItem(tet);
 
-    view->show();
+       }
 
-    return a.exec();
+
+
+       QGraphicsView * view = new QGraphicsView(scene);
+
+       view->show();
+       view->setFixedWidth(320);
+       view->setFixedHeight(480);
+
+       return a.exec();
 }
