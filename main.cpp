@@ -3,13 +3,13 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
 #include <QPixmap>
-
+#include <QKeyEvent>
 
 
 
 #include <QDebug>
 #include "tertimino.h"
-#include "MyRect.h"
+
 
 
 
@@ -35,6 +35,29 @@ int figures[7][4] =
     2,3,4,5, // O
 };
 
+class Tetrimino: public QGraphicsItemGroup
+{
+public:
+    void keyPressEvent(QKeyEvent *event)
+    {
+        if (event->key() == Qt::Key_Left){
+                setPos(x()-18,y());
+            }
+        else if (event->key() == Qt::Key_Right){
+                setPos(x()+18,y());
+            }
+        else if (event->key() == Qt::Key_Up){
+                setRotation(rotation()+90);
+            }
+        else if (event->key() == Qt::Key_Down){
+                setPos(x(),y()+18);
+            }
+    }
+
+};
+
+void drawBlocks(int, Point){}
+
 int main(int argc, char *argv[])
 {
 
@@ -48,33 +71,42 @@ QGraphicsScene * scene = new QGraphicsScene();
        copy = image.copy(recto);
 
        //set tetrimino shape
-       int n = 0;
+       int n = 2;
        for (int i = 0; i <4; i++)
        {
            quad[i].x= figures[n][i] % 2;
            quad[i].y= figures[n][i] / 2;
        }
+       Tetrimino *tetgroup = new Tetrimino();
 
-       //int *dx = new int;
        for (int i=0; i <4; i++)
        {
        // create an item to add to the scene
-       Tertimino * tet = new Tertimino();
+       QGraphicsPixmapItem * tet = new QGraphicsPixmapItem();
        tet->setPixmap(copy);
 
 
        tet->setPos(quad[i].x*pix_l,quad[i].y*pix_l);
-       if (i==0){
-       tet->setFlag(QGraphicsItem::ItemIsFocusable);
-       tet->setFocus();
-        }
 
 
 
-       scene->addItem(tet);
+       tetgroup->addToGroup(tet);
 
+       if(i==1)
+       {
+           tetgroup->setTransformOriginPoint(quad[i].x*pix_l,quad[i].y*pix_l);
        }
 
+
+       //scene->addItem(tet);
+
+       }
+       tetgroup->setFlag(QGraphicsItem::ItemIsFocusable);
+       tetgroup->setFocus();
+
+       scene->addItem(tetgroup);
+       scene->addLine(-100,0,100,0);
+       scene->addLine(0,-100,0,100);
 
 
        QGraphicsView * view = new QGraphicsView(scene);
