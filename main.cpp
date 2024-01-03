@@ -16,6 +16,8 @@
 const int M = 20;
 const int N = 10;
 const int pix_l = 18;
+const int window_width = 320;
+const int window_height = 480;
 
 int field[M][N];
 
@@ -41,10 +43,15 @@ public:
     void keyPressEvent(QKeyEvent *event)
     {
         if (event->key() == Qt::Key_Left){
+            if(x()>-144){
                 setPos(x()-18,y());
+                qDebug()<<x();
+            }
             }
         else if (event->key() == Qt::Key_Right){
+            if(x()<120){
                 setPos(x()+18,y());
+            }
             }
         else if (event->key() == Qt::Key_Up){
                 setRotation(rotation()+90);
@@ -56,7 +63,37 @@ public:
 
 };
 
-void drawBlocks(int, Point){}
+void buildBlocks(int figures[7][4], Point quad[4], Tetrimino *tetgroup, int colour)
+{
+    //clip tetris tile
+    QRect recto(pix_l*colour, 0, pix_l, pix_l);
+    QPixmap image(":/tiles.png");
+    QPixmap copy ;
+    copy = image.copy(recto);
+
+    //set tetrimino shape
+    int n = colour;
+    for (int i = 0; i <4; i++)
+    {
+        quad[i].x= figures[n][i] % 2;
+        quad[i].y= figures[n][i] / 2;
+    }
+
+    for (int i=0; i <4; i++)
+    {
+        QGraphicsPixmapItem * tet = new QGraphicsPixmapItem();
+        tet->setPixmap(copy);
+        tet->setPos(quad[i].x*pix_l,quad[i].y*pix_l);
+
+        tetgroup->addToGroup(tet);
+
+        if(i==1)
+           {
+               tetgroup->setTransformOriginPoint(quad[i].x*pix_l,quad[i].y*pix_l);
+           }
+
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -64,56 +101,39 @@ int main(int argc, char *argv[])
 QApplication a(argc, argv);
 QGraphicsScene * scene = new QGraphicsScene();
 
-       //clip tetris tile
-       QRect recto(pix_l*3, 0, pix_l, pix_l);
-       QPixmap image(":/tiles.png");
-       QPixmap copy ;
-       copy = image.copy(recto);
+//clip tetris tile
+QRect recto(pix_l*3, 0, pix_l, pix_l);
+QPixmap image(":/tiles.png");
+QPixmap copy ;
+copy = image.copy(recto);
 
-       //set tetrimino shape
-       int n = 2;
-       for (int i = 0; i <4; i++)
-       {
-           quad[i].x= figures[n][i] % 2;
-           quad[i].y= figures[n][i] / 2;
-       }
-       Tetrimino *tetgroup = new Tetrimino();
+//set tetrimino shape
+int n = 2;
+for (int i = 0; i <4; i++)
+{
+    quad[i].x= figures[n][i] % 2;
+    quad[i].y= figures[n][i] / 2;
+}
 
-       for (int i=0; i <4; i++)
-       {
-       // create an item to add to the scene
-       QGraphicsPixmapItem * tet = new QGraphicsPixmapItem();
-       tet->setPixmap(copy);
+Tetrimino *tetgroup = new Tetrimino();
 
+buildBlocks(figures,quad,tetgroup,1);
+tetgroup->setFlag(QGraphicsItem::ItemIsFocusable);
+tetgroup->setFocus();
 
-       tet->setPos(quad[i].x*pix_l,quad[i].y*pix_l);
-
-
-
-       tetgroup->addToGroup(tet);
-
-       if(i==1)
-       {
-           tetgroup->setTransformOriginPoint(quad[i].x*pix_l,quad[i].y*pix_l);
-       }
+scene->addItem(tetgroup);
+scene->addLine(-160,0,160,0);
+scene->addLine(0,-240,0,240);
 
 
-       //scene->addItem(tet);
+QGraphicsView * view = new QGraphicsView(scene);
 
-       }
-       tetgroup->setFlag(QGraphicsItem::ItemIsFocusable);
-       tetgroup->setFocus();
-
-       scene->addItem(tetgroup);
-       scene->addLine(-100,0,100,0);
-       scene->addLine(0,-100,0,100);
+view->show();
+view->setFixedWidth(window_width);
+view->setFixedHeight(window_height);
+view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 
-       QGraphicsView * view = new QGraphicsView(scene);
-
-       view->show();
-       view->setFixedWidth(320);
-       view->setFixedHeight(480);
-
-       return a.exec();
+return a.exec();
 }
