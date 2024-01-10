@@ -1,13 +1,35 @@
 #include "tetrimino.h"
+
 #include <QTimer>
 #include <QDebug>
+#include <QList>
 
 
 tetrimino::tetrimino()
 {
-
+    isActive = true;
     pix_l = 18;
     colour = 2;
+
+
+
+    drawBlocks();
+
+    this->setFlag(QGraphicsItem::ItemIsFocusable);
+    this->setFocus();
+    // connect
+        QTimer * timer = new QTimer();
+        connect(timer,SIGNAL(timeout()),this,SLOT(moveDown()));
+
+        timer->start(1000);
+}
+
+tetrimino::tetrimino(int pix_l, int colour, board *gameboard): pix_l{pix_l}, colour{colour}, gameboard{gameboard}
+{
+    isActive = true;
+    //pix_l = 18;
+    //colour = 2;
+
 
 
     drawBlocks();
@@ -48,11 +70,14 @@ void tetrimino::keyPressEvent(QKeyEvent *event)
 
 void tetrimino::drawBlocks()
 {
-    qDebug()<<figures;
+
     QRect recto(pix_l*colour, 0, pix_l, pix_l);
     QPixmap image(":/tiles.png");
     QPixmap copy ;
     copy = image.copy(recto);
+
+    QList<QGraphicsPixmapItem*> * benchode = new QList<QGraphicsPixmapItem*>();
+
 
     //set tetrimino shape
     int n = colour;
@@ -68,6 +93,7 @@ void tetrimino::drawBlocks()
         tet->setPixmap(copy);
         tet->setPos(quad[i].x*pix_l,quad[i].y*pix_l);
 
+        benchode->append(tet);
 
         this->addToGroup(tet);
 
@@ -79,20 +105,49 @@ void tetrimino::drawBlocks()
 
     }
 
+   // scene()->addItem(this);
+
 }
 
 void tetrimino::moveDown()
 {
-    if(sceneBoundingRect().bottom()<240)
+    if(this->sceneBoundingRect().bottom()<190)
     {
+    //qDebug()<<sceneBoundingRect().bottom();
     setPos(x(),y()+18);
     }
     else
     {
-        //this->removeFromGroup(this->childItems().first());
-        return;
+        setToBoard();
+       // return;
 
     }
+
+}
+
+void tetrimino::setToBoard()
+{
+    this->clearFocus();
+    isActive = false;
+    this->gameboard->setFlag(QGraphicsItem::ItemIsFocusable);
+    //gameboard->setFocus();
+    //qDebug()<<"is Active is"<<isActive;
+
+
+    for(int i = 0; i<4; i++)
+    {
+
+        gameboard->addToGroup(this->childItems().first());
+        //qDebug()<<gameboard->y();
+        //gameboard->setY(200);
+       // qDebug()<<gameboard->y();
+        //gameboard->drawnew();
+
+
+
+    }
+
+    delete this;
 
 }
 

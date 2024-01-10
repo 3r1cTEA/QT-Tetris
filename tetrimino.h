@@ -6,6 +6,9 @@
 #include <QKeyEvent>
 #include <QRect>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
+
+#include "board.h"
 
 class tetrimino: public QObject, public QGraphicsItemGroup
 {
@@ -25,9 +28,14 @@ public:
     {int x,y;} quad[4];
     int pix_l;
     int colour;
+    bool isActive;
+    QList<QGraphicsPixmapItem*> * benchode;
    tetrimino();
+   tetrimino(int pix_l, int colour, board *gameboard);
+   board *gameboard;
    void drawBlocks();
    void keyPressEvent(QKeyEvent * event);
+   void setToBoard();
 
 public slots:
    void moveDown();
