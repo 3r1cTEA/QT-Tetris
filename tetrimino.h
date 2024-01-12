@@ -36,6 +36,7 @@ public:
    void drawBlocks();
    void keyPressEvent(QKeyEvent * event);
    void setToBoard();
+   void collision();
 
 public slots:
    void moveDown();

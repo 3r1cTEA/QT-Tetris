@@ -33,6 +33,7 @@ tetrimino::tetrimino(int pix_l, int colour, board *gameboard): pix_l{pix_l}, col
 
 
     drawBlocks();
+    //scene()->addItem(this);
 
     this->setFlag(QGraphicsItem::ItemIsFocusable);
     this->setFocus();
@@ -45,24 +46,33 @@ tetrimino::tetrimino(int pix_l, int colour, board *gameboard): pix_l{pix_l}, col
 
 void tetrimino::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Left){
+    if (event->key() == Qt::Key_Left && (!this->collidesWithItem(gameboard))){
         if(sceneBoundingRect().left()>-160){
             setPos(x()-18,y());
-            //qDebug()<<sceneBoundingRect().left();
+
+            if(this->collidesWithItem(gameboard)){
+                this->setX(x()+18);
+            }
         }
         }
-    else if (event->key() == Qt::Key_Right){
+    else if (event->key() == Qt::Key_Right && (!this->collidesWithItem(gameboard))){
         if(sceneBoundingRect().right()<120){
             setPos(x()+18,y());
+            if(this->collidesWithItem(gameboard)){
+                this->setX(x()-18);
+            }
         }
         }
-    else if (event->key() == Qt::Key_Up){
+    else if (event->key() == Qt::Key_Up ){
             setRotation(rotation()+90);
         }
-    else if (event->key() == Qt::Key_Down ){
+    else if (event->key() == Qt::Key_Down && this->sceneBoundingRect().bottom()<190){
         if(sceneBoundingRect().bottom()<240)
         {
             setPos(x(),y()+18);
+            if(this->collidesWithItem(gameboard)){
+                this->setY(y()-18);
+            }
         }
         }
 
@@ -76,7 +86,7 @@ void tetrimino::drawBlocks()
     QPixmap copy ;
     copy = image.copy(recto);
 
-    QList<QGraphicsPixmapItem*> * benchode = new QList<QGraphicsPixmapItem*>();
+
 
 
     //set tetrimino shape
@@ -93,8 +103,6 @@ void tetrimino::drawBlocks()
         tet->setPixmap(copy);
         tet->setPos(quad[i].x*pix_l,quad[i].y*pix_l);
 
-        benchode->append(tet);
-
         this->addToGroup(tet);
 
 
@@ -103,9 +111,11 @@ void tetrimino::drawBlocks()
                this->setTransformOriginPoint(quad[i].x*pix_l,quad[i].y*pix_l);
            }
 
-    }
 
-   // scene()->addItem(this);
+    }
+    this->setPos(0,-10*pix_l);
+
+   //scene()->addItem(this);
 
 }
 
@@ -115,7 +125,9 @@ void tetrimino::moveDown()
     {
     //qDebug()<<sceneBoundingRect().bottom();
     setPos(x(),y()+18);
+    collision();
     }
+
     else
     {
         setToBoard();
@@ -130,25 +142,52 @@ void tetrimino::setToBoard()
     this->clearFocus();
     isActive = false;
     this->gameboard->setFlag(QGraphicsItem::ItemIsFocusable);
-    //gameboard->setFocus();
-    //qDebug()<<"is Active is"<<isActive;
-
 
     for(int i = 0; i<4; i++)
     {
 
         gameboard->addToGroup(this->childItems().first());
-        //qDebug()<<gameboard->y();
-        //gameboard->setY(200);
-       // qDebug()<<gameboard->y();
-        //gameboard->drawnew();
+
+
 
 
 
     }
 
+    scene()->addItem(gameboard);
+    this->isActive=false;
+
+    int rand_colour = rand() % 7 +1;
+
+    tetrimino *teto = new tetrimino(18,rand_colour,gameboard);
+    scene()->addItem(teto);
+
     delete this;
 
+}
+
+void tetrimino::collision()
+{
+    for(int i = 0; i<gameboard->childItems().length(); i++)
+    {
+       if(gameboard->childItems().isEmpty())
+       {
+
+       }
+       else
+       {
+           for(int j = 0; j <4; j++)
+           {
+              if(this->childItems()[j]->collidesWithItem(gameboard->childItems()[i]))
+              {
+                this->setY(y()-pix_l);
+                this->setToBoard();
+                return;
+           }
+           }
+       }
+
+    }
 }
 
 

@@ -33,10 +33,13 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QGraphicsScene * scene = new QGraphicsScene();
 
+
     board *gameBoard = new board();
+    //gameBoard->setPos()
+    //qDebug()<<gameBoard->y();
 
 
-    tetrimino *tetgroup = new tetrimino(18, 4, gameBoard);
+    tetrimino *tetgroup = new tetrimino(18, 6, gameBoard);
 
 
 
@@ -45,10 +48,11 @@ int main(int argc, char *argv[])
 
     scene->addLine(-160,0,160,0);
     scene->addLine(0,-240,0,240);
+    scene->addLine(-160,200,160,200);
 
     scene->addItem(tetgroup);
-    gameBoard->setY(0);
-    scene->addItem(gameBoard);
+    //gameBoard->setY(0);
+    //scene->addItem(gameBoard);
 
 
 

@@ -8,5 +8,5 @@ board::board()
 
 void board::drawnew()
 {
-//scene()->addItem(this);
+
 }
