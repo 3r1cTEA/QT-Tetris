@@ -5,24 +5,6 @@
 #include <QList>
 
 
-tetrimino::tetrimino()
-{
-    isActive = true;
-    pix_l = 18;
-    colour = 2;
-
-
-
-    drawBlocks();
-
-    this->setFlag(QGraphicsItem::ItemIsFocusable);
-    this->setFocus();
-    // connect
-        QTimer * timer = new QTimer();
-        connect(timer,SIGNAL(timeout()),this,SLOT(moveDown()));
-
-        timer->start(1000);
-}
 
 tetrimino::tetrimino(int pix_l, int colour, board *gameboard): pix_l{pix_l}, colour{colour}, gameboard{gameboard}
 {
@@ -71,14 +53,13 @@ void tetrimino::keyPressEvent(QKeyEvent *event)
 
         }
     else if (event->key() == Qt::Key_Down){
-        if(sceneBoundingRect().bottom()<190)
-        {
+
             setPos(x(),y()+18);
             if(collisionSide())
             {
                 setY(y()-18);
             }
-        }
+
         }
 
 }
@@ -94,7 +75,6 @@ void tetrimino::drawBlocks()
 
 
 
-    //set tetrimino shape
     int n = colour;
     for (int i = 0; i <4; i++)
     {
@@ -120,7 +100,7 @@ void tetrimino::drawBlocks()
     }
     this->setPos(0,-10*pix_l);
 
-   //scene()->addItem(this);
+
 
 }
 
@@ -128,7 +108,7 @@ void tetrimino::moveDown()
 {
     if(this->sceneBoundingRect().bottom()<190)
     {
-    //qDebug()<<sceneBoundingRect().bottom();
+
     setPos(x(),y()+18);
     if(collisionSide())
     {
@@ -167,7 +147,7 @@ void tetrimino::setToBoard()
     //scene()->addItem(gameboard);
     this->isActive=false;
 
-    int rand_colour = rand() % 7 +1;
+    int rand_colour = rand() % 6;
 
     tetrimino *teto = new tetrimino(18,rand_colour,gameboard);
     scene()->addItem(teto);
@@ -176,34 +156,12 @@ void tetrimino::setToBoard()
 
 }
 
-void tetrimino::collisionDown()
-{
-    for(int i = 0; i<gameboard->childItems().length(); i++)
-    {
-       if(gameboard->childItems().isEmpty())
-       {
 
-       }
-       else
-       {
-           for(int j = 0; j <4; j++)
-           {
-              if(this->childItems()[j]->collidesWithItem(gameboard->childItems()[i]))
-              {
-                this->setY(y()-pix_l);
-                this->setToBoard();
-                return;
-           }
-           }
-       }
-
-    }
-}
 
 bool tetrimino::collisionSide()
 {
     bool temp = false;
-    if(!(sceneBoundingRect().left()>-160) || !(sceneBoundingRect().right()<120))
+    if(!(sceneBoundingRect().left()>-160) || !(sceneBoundingRect().right()<120) || !(sceneBoundingRect().bottom()<190))
     {
         temp = true;
     }

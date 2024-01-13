@@ -6,7 +6,7 @@ board::board()
 
 }
 
-void board::drawnew()
+void board::checkLines()
 {
 
 }

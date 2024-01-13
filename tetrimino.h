@@ -30,13 +30,13 @@ public:
     int colour;
     bool isActive;
     QList<QGraphicsPixmapItem*> * benchode;
-   tetrimino();
+
    tetrimino(int pix_l, int colour, board *gameboard);
    board *gameboard;
    void drawBlocks();
    void keyPressEvent(QKeyEvent * event);
    void setToBoard();
-   void collisionDown();
+
    bool collisionSide();
 
 public slots:

@@ -12,7 +12,7 @@ public:
 
     int field[20][10];
 
-    void drawnew();
+    void checkLines();
 
 };
 
