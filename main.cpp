@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
     scene->addItem(tetgroup);
     //gameBoard->setY(0);
-    //scene->addItem(gameBoard);
+    scene->addItem(gameBoard);
 
 
 
