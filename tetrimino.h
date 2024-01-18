@@ -29,7 +29,7 @@ public:
     int pix_l;
     int colour;
     bool isActive;
-    QList<QGraphicsPixmapItem*> * benchode;
+
 
    tetrimino(int pix_l, int colour, board *gameboard);
    board *gameboard;

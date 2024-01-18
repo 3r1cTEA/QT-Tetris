@@ -6,9 +6,11 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <QObject>
+#include <QLine>
 
 
 #include <QDebug>
+
 #include "tetrimino.h"
 #include "board.h"
 
@@ -20,13 +22,6 @@
 const int window_width = 320;
 const int window_height = 480;
 
-
-
-
-
-
-
-
 int main(int argc, char *argv[])
 {
 
@@ -34,10 +29,20 @@ int main(int argc, char *argv[])
     QGraphicsScene * scene = new QGraphicsScene();
 
 
-    board *gameBoard = new board();
-    //gameBoard->setPos()
-    //qDebug()<<gameBoard->y();
 
+    QPixmap image(":/background.png");
+    QGraphicsPixmapItem * back = new QGraphicsPixmapItem();
+    back->setPixmap(image);
+    back->setScale(1);
+    back->setPos(-160, -220);
+    scene->addItem(back);
+
+
+
+
+
+
+    board *gameBoard = new board();
 
     tetrimino *tetgroup = new tetrimino(18, 6, gameBoard);
 
@@ -45,13 +50,7 @@ int main(int argc, char *argv[])
 
 
 
-
-    scene->addLine(-160,0,160,0);
-    scene->addLine(0,-240,0,240);
-    scene->addLine(-160,200,160,200);
-
     scene->addItem(tetgroup);
-    //gameBoard->setY(0);
     scene->addItem(gameBoard);
 
 

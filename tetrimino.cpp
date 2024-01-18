@@ -9,10 +9,6 @@
 tetrimino::tetrimino(int pix_l, int colour, board *gameboard): pix_l{pix_l}, colour{colour}, gameboard{gameboard}
 {
     isActive = true;
-
-
-
-
     drawBlocks();
 
 
@@ -95,12 +91,8 @@ void tetrimino::drawBlocks()
            {
                this->setTransformOriginPoint(quad[i].x*pix_l,quad[i].y*pix_l);
            }
-
-
     }
-    this->setPos(0,-10*pix_l);
-
-
+    this->setPos((-4*pix_l)+12,(-12*pix_l+9));
 
 }
 
@@ -111,17 +103,17 @@ void tetrimino::moveDown()
 
     setPos(x(),y()+18);
     if(collisionSide())
-    {
+        {
         setY(y()-18);
         setToBoard();
         return;
-    }
+        }
     }
 
     else
     {
-        setToBoard();
-        return;
+    setToBoard();
+    return;
 
     }
 
@@ -135,16 +127,11 @@ void tetrimino::setToBoard()
 
     for(int i = 0; i<4; i++)
     {
-
         gameboard->addToGroup(this->childItems().first());
-
-
-
-
 
     }
 
-    //scene()->addItem(gameboard);
+
     this->isActive=false;
 
     int rand_colour = rand() % 6;
@@ -152,7 +139,9 @@ void tetrimino::setToBoard()
     tetrimino *teto = new tetrimino(18,rand_colour,gameboard);
     scene()->addItem(teto);
 
+
     delete this;
+    gameboard->checkLines();
 
 }
 
@@ -161,7 +150,7 @@ void tetrimino::setToBoard()
 bool tetrimino::collisionSide()
 {
     bool temp = false;
-    if(!(sceneBoundingRect().left()>-160) || !(sceneBoundingRect().right()<120) || !(sceneBoundingRect().bottom()<190))
+    if(!(sceneBoundingRect().left()>-144) || !(sceneBoundingRect().right()<54) || !(sceneBoundingRect().bottom()<189))
     {
         temp = true;
     }
@@ -180,7 +169,7 @@ bool tetrimino::collisionSide()
 
                 temp = true;
                 return temp;
-           }
+              }
            }
        }
 
