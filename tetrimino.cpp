@@ -62,6 +62,7 @@ void tetrimino::keyPressEvent(QKeyEvent *event)
             {
                 setY(y()-pix_l);
                 setToBoard();
+                return;
             }
 
         }
@@ -136,11 +137,12 @@ void tetrimino::setToBoard()
     }
 
 
-    int rand_colour = rand() % 6;
+
 
 
     if (!gameboard->gameOver())
     {
+        int rand_colour = rand() % 6;
         tetrimino *teto = new tetrimino(pix_l,rand_colour,gameboard);
         scene()->addItem(teto);
         delete this;
