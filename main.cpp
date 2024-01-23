@@ -21,6 +21,7 @@
 
 const int window_width = 320;
 const int window_height = 480;
+const int pix_l = 18;
 
 int main(int argc, char *argv[])
 {
@@ -42,9 +43,8 @@ int main(int argc, char *argv[])
 
 
 
-    board *gameBoard = new board();
-
-    tetrimino *tetgroup = new tetrimino(18, 6, gameBoard);
+    board *gameBoard = new board(pix_l);
+    tetrimino *tetgroup = new tetrimino(pix_l, 6, gameBoard);
 
 
 
