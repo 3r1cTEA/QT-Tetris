@@ -1,10 +1,5 @@
 #include "board.h"
-#include <QGraphicsScene>
-#include <QRect>
-#include <QGraphicsPixmapItem>
-#include <QLine>
-#include <QList>
-#include <QDebug>
+
 
 
 board::board(int pix_l): pix_l {pix_l}

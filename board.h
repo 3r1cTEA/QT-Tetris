@@ -3,10 +3,13 @@
 
 #include <QGraphicsItemGroup>
 #include <QGraphicsPixmapItem>
-
 #include <QGraphicsTextItem>
 #include <QFont>
-
+#include <QGraphicsScene>
+#include <QRect>
+#include <QLine>
+#include <QList>
+#include <QDebug>
 
 
 class board: public QGraphicsItemGroup

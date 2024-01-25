@@ -1,15 +1,9 @@
 #include <QApplication>
 #include <QGraphicsView>
-#include <QGraphicsRectItem>
 #include <QGraphicsScene>
 #include <QPixmap>
-#include <QKeyEvent>
-#include <QTimer>
-#include <QObject>
-#include <QLine>
 
 
-#include <QDebug>
 
 #include "tetrimino.h"
 #include "board.h"

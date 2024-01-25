@@ -1,14 +1,11 @@
 #include "tetrimino.h"
 
-#include <QTimer>
-#include <QDebug>
-#include <QList>
+
 
 
 
 tetrimino::tetrimino(const int pix_l, int colour, board *gameboard): pix_l{pix_l}, colour{colour}, gameboard{gameboard}
 {
-   // isActive = true;
     drawBlocks();
 
 

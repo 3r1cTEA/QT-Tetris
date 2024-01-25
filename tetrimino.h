@@ -7,6 +7,9 @@
 #include <QRect>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
+#include <QTimer>
+#include <QDebug>
+#include <QList>
 
 #include "board.h"
 
